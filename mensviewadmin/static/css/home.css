@@ -1,3 +1,6 @@
-div{
-    color: blue;
+.navbar-brand{
+    font-size: x-small;
+}
+.navbar-text{
+    font-size: x-small;
 }
