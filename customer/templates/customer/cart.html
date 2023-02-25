@@ -1,0 +1,46 @@
+{% extends 'customer/homepage.html' %}
+{% load static %}
+{% block content %}
+<div class="wrapper">
+  {% if cart_list %}
+  <h1>cart</h1>
+  <div class="project">
+    <div class="shop">
+      {% for cart in cart_list %}
+      <div class="box shadow">
+        <img src="{{cart.product.product_image.url}}" alt="">
+        <div class="content">
+          <h3>{{cart.product.product_name}}
+            <p>Size:{{cart.product_size}}</p>
+          </h3>
+          <h4>Rs:{{cart.product.price}}</h4>
+          <p class="unit">quantity: <input value="1" type="number"></p>
+          <p class="btn-area">
+            <i class="fa fa-trash"></i>
+            <span class="btn4"><a href="{% url 'customer:remove_cart' cart.product.id %}">Remove</a></span>
+          </p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+       <div class="right-bar shadow">
+        <p><span>subtotal</span> <span>45</span></p>
+        <hr>
+        <p><span>tax</span> <span>45</span></p>
+        <hr>
+        <p><span>shipping</span> <span>Free</span></p>
+        <hr>
+        <p><span>total</span> <span>45</span></p>
+        <a href=""><i class="fa fa-shopping-cart"></i>Checkout</a>
+       </div>
+  </div>
+  {% else %}
+  <div class="cart1 text-center fw-lighter mt-5 mb-5">
+    <h2>Cart Empty</h2>
+  </div>
+  {% endif %}
+</div>
+<br>
+<br>
+<br>
+{% endblock %}
