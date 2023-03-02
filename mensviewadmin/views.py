@@ -5,15 +5,22 @@ from django.core.mail import send_mail
 from django.conf import settings
 
 # Create your views here.
-
+def master_page(request):   
+    return render(request,'mensviewadmin/master.html')
 def adminhome_page(request):
     customers = Customer.objects.all()
+    cust_count = customers.count()
     product_list = Product.objects.all()
+    prod_count = product_list.count()
     sellers = Seller.objects.filter(approved=True)
+    sellers_count = sellers.count()
     context = {
         'customer_list':customers,
         'seller_list':sellers,
-        'prods': product_list
+        'prods': product_list,
+        'cust_count':cust_count,
+        'prod_count':prod_count,
+        'sellers_count':sellers_count
     }
     return render(request,'mensviewadmin/adminhome.html',context)
 def approve_page(request):
@@ -51,4 +58,14 @@ def delete_cust(request,sid):
 def delete_prod(request,sid):
     prod_list = Product.objects.get(id = sid)
     prod_list.delete()
+    return redirect('mensviewadmin:viewprod')
+def trend(request,pid):
+    prod=Product.objects.get(id=pid)
+    prod.trend=True
+    prod.save()
+    return redirect('mensviewadmin:viewprod')
+def un_trend(request,pid):
+    prod=Product.objects.get(id=pid)
+    prod.trend=False
+    prod.save()
     return redirect('mensviewadmin:viewprod')

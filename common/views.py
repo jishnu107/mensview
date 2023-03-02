@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
 from . models import Customer,Seller
 import random
+from seller.models import Product
 
 # Create your views here.
 from django.shortcuts import render
@@ -72,4 +73,7 @@ def custlogin_page(request):
 
     return render(request,'common/custlogin.html',{'custmsg':custmsg})
 def allview_page(request):
-    return render(request,'common/allview.html')
+    product_list = Product.objects.all()
+    context ={'prods': product_list,
+            }
+    return render(request,'common/allview.html',context)

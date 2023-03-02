@@ -1,4 +1,4 @@
-{% extends 'seller/homepage.html' %}
+{% extends 'seller/master.html' %}
 {% load static %}
 {% block content %}
 <div class="row my-5 me-1">
@@ -29,7 +29,7 @@
           </div>
           <a class="p-3 sheo nav-link text-center text-white mt-3 cursor" 
           href="{% url 'seller:pdetails' product.id %}">
-            BuyNow
+            Details
           </a> 
         </div>
       </div>

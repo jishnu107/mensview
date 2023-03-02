@@ -1,0 +1,72 @@
+{% extends 'customer/master.html' %}
+{% load static %}
+{% block content %}
+<div class="container">
+ <div class="row mt-5">
+  <div class="col-sm-6">
+    <h4>Shipping Address</h4>
+    <hr>
+      <div class="card mb-2">
+        <div class="card-body">
+          <form class="row g-3">
+            <div class="col-md-6">
+              <label for="inputEmail4" class="form-label">First Name</label>
+              <input type="text" class="form-control" id="inputEmail4">
+            </div>
+            <div class="col-md-6">
+              <label for="inputPassword4" class="form-label">Last Name</label>
+              <input type="text" class="form-control" id="inputPassword4">
+            </div>
+            <div class="col-12">
+              <label for="inputAddress" class="form-label">Address</label>
+              <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+            </div>
+            <div class="col-md-6">
+              <label for="inputCity" class="form-label">City</label>
+              <input type="text" class="form-control" id="inputCity">
+            </div>
+            <div class="col-md-4">
+              <label for="inputCity" class="form-label">State</label>
+              <input type="text" class="form-control" id="inputCity">
+            </div>
+            <div class="col-md-2">
+              <label for="inputZip" class="form-label">Pincode</label>
+              <input type="text" class="form-control" id="inputZip">
+            </div>
+            <div class="col-12">
+              <button type="submit" class="btn btn-primary">SUBMIT</button>
+            </div>
+          </form>
+        </div>
+      </div>
+  </div>
+  <div class="col-sm-4 offset-sm-1">
+    <h4>Items</h4>
+    <hr>
+    <div class="card mb-2">
+      <div class="card-body">
+        <div class="row g-3">
+        {% for cart in cart_list %}
+          <div class="col-3">
+            <img src="{{cart.product.product_image.url}}" alt="" class="rounded" width="60" height="60">
+          </div>
+          <div class="col-9">
+        <h5>{{cart.product.product_name}}</h5>
+        <p>Quantity: 2</p>
+        <p class="fw-bold">RS:{{cart.product.price}}</p>
+          </div>
+    {% endfor %} 
+        </div>
+      </div>
+    </div> 
+        <div class="text-end">
+          <button type="submit" class="btn btn-warning mt-3 px-5 fw-bold">Continue</button>
+        </div>
+    </div>
+  </div>
+</div>
+<br>
+<br>
+<br>
+<br>
+{% endblock %}

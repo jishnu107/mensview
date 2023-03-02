@@ -3,6 +3,7 @@ from . import views
 
 app_name = 'mensviewadmin'
 urlpatterns = [
+    path('master',views.master_page,name='master'),
     path('adminhome',views.adminhome_page,name='adminhome'),
     path('approve',views.approve_page,name='approve'),
     path('viewsellers',views.viewsellers_page,name='viewsellers'),
@@ -12,4 +13,6 @@ urlpatterns = [
     path('deletesell/<int:sid>',views.delete_seller,name='deletesell'),
     path('deletecust/<int:sid>',views.delete_cust,name='deletecust'),
     path('deleteprod/<int:sid>',views.delete_prod,name='deleteprod'),
+    path('trend/<int:pid>',views.trend,name='trend'),
+    path('untrend/<int:pid>',views.un_trend,name='untrend'),
 ]

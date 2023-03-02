@@ -1,7 +1,8 @@
-{% extends 'customer/homepage.html' %}
+{% extends 'customer/master.html' %}
 {% load static %}
 {% block content %}
 <div class="wrapper">
+  {% if wish_list %}
   <h1>My wishlist</h1>
   <div class="project">
     <div class="shop">
@@ -24,6 +25,11 @@
       {% endfor %}
     </div>
   </div>
+  {% else %}
+  <div class="cart1 text-center fw-lighter mt-5 mb-5">
+    <h2>Whislist Empty</h2>
+  </div>
+  {% endif %}
 </div>
 <br>
 <br>

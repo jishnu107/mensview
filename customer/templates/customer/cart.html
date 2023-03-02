@@ -1,4 +1,4 @@
-{% extends 'customer/homepage.html' %}
+{% extends 'customer/master.html' %}
 {% load static %}
 {% block content %}
 <div class="wrapper">
@@ -31,7 +31,7 @@
         <p><span>shipping</span> <span>Free</span></p>
         <hr>
         <p><span>total</span> <span>45</span></p>
-        <a href=""><i class="fa fa-shopping-cart"></i>Checkout</a>
+        <a href="{% url 'customer:checkout' %}"><i class="fa fa-shopping-cart"></i>Checkout</a>
        </div>
   </div>
   {% else %}

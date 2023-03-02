@@ -1,4 +1,4 @@
-{% extends 'seller/homepage.html' %}
+{% extends 'seller/master.html' %}
 {% load static %}
 {% block content %}
 
@@ -37,10 +37,6 @@
               <a href="{% url 'seller:deleteprod' details.id %}"
                 style="color: aliceblue;text-decoration: none;">REMOVE</a>
             </button>
-            <button class="btn btn-danger"><a class="nav-link"
-              href="{% url 'seller:trend' details.id %}">Trending</a></button>
-              <button class="btn btn-danger"><a class="nav-link"
-                href="{% url 'seller:untrend' details.id %}">untrend</a></button>
             <p class="alert"></p>
             </form>
 

@@ -4,10 +4,15 @@ from . models import Product
 from django.http import JsonResponse
 
 # Create your views here.
+def master_page(request):   
+    return render(request,'seller/master.html')
 def home_page(request):
     seller_data = Seller.objects.get(id=request.session['seller'])
+    seller_products = Product.objects.filter(seller = request.session['seller'])
+    products_count = seller_products.count()
     context = {
-        'data' : seller_data
+        'data' : seller_data,
+        'products_count': products_count
     }
     return render(request,'seller/homepage.html',context)
 def orders_page(request):
@@ -110,17 +115,33 @@ def get_stock(request):
     price = product.price
     product_id = product.id
     return JsonResponse({'p_name':product_name,'stock':current_stock,'p_id':product_id,'price':price})
-def trend(request,pid):
-    prod=Product.objects.get(id=pid)
-    prod.trend=True
-    prod.save()
-    return redirect('seller:product')
-def un_trend(request,pid):
-    prod=Product.objects.get(id=pid)
-    prod.trend=False
-    prod.save()
-    return redirect('seller:product')
 def delete_prod(request,sid):
     prod_list = Product.objects.get(id = sid)
     prod_list.delete()
     return redirect('seller:product')
+def sellpass_page(request):
+    msg =''
+    seller_data = Seller.objects.get(id=request.session['seller'])
+    if request.method == 'POST':
+        seller = Seller.objects.get(id = request.session['seller'])
+
+        current_pass = request.POST['current_pass'] 
+        new_pass = request.POST['new_pass'] 
+        confirm_pass = request.POST['confirm_pass']
+
+        if seller.seller_pass == current_pass:
+
+            if new_pass == confirm_pass:
+                 seller.seller_pass = new_pass
+                 seller.save()
+                 msg = 'Password changed succesfully'
+
+            else:
+                msg = 'Password does not match'
+
+        else:
+            msg = 'Incorrect Password'
+    context =  {'msg':msg,
+                'data': seller_data,
+                }
+    return render(request, 'seller/sellpass.html',context)

@@ -1,4 +1,4 @@
-{% extends 'seller/homepage.html' %}
+{% extends 'seller/master.html' %}
 {% load static %}
 {% block content %}
 <div class="row my-5 me-1">
@@ -10,7 +10,7 @@
                     <div class="card-body w-100">
                         <form method="POST">
                             {% csrf_token %}
-                            <input type="text" id="p_id" name="productid">
+                            <input type="text" id="p_id" hidden name="productid">
                             <div class="mb-3">
                                 <label for="exampleFormControlInput1" class="form-label">Product Name</label>
                                 <select id="productno" class="form-select" aria-label="Default select example">
