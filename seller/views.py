@@ -1,5 +1,6 @@
 from django.shortcuts import render,redirect
-from common.models import Seller
+from common.models import Seller,Customer
+from customer.models import Order,OrderItem
 from . models import Product
 from django.http import JsonResponse
 
@@ -10,13 +11,25 @@ def home_page(request):
     seller_data = Seller.objects.get(id=request.session['seller'])
     seller_products = Product.objects.filter(seller = request.session['seller'])
     products_count = seller_products.count()
+    order =OrderItem.objects.filter(seller=request.session['seller'])
+    order_count = order.count()
+    delivered = OrderItem.objects.filter(seller=request.session['seller'],item_status='delivered')
+    delivered_count = delivered.count()
+    percentage = (delivered_count / order_count) * 100 if delivered_count > 0 else 0
     context = {
         'data' : seller_data,
-        'products_count': products_count
+        'products_count': products_count,
+        'order_count':order_count,
+        'order':order,
+        'delivered_count':delivered_count,
+        'percentage':percentage
     }
     return render(request,'seller/homepage.html',context)
 def orders_page(request):
-    return render(request,'seller/orders.html')
+    seller_data = Seller.objects.get(id=request.session['seller'])
+    orders = OrderItem.objects.filter(seller=request.session['seller'])
+    context = {'orders': orders,'data': seller_data}
+    return render(request,'seller/orders.html',context)
 def product_page(request):
     seller_products = Product.objects.filter(seller = request.session['seller'])
     seller_data = Seller.objects.get(id=request.session['seller'])
@@ -145,3 +158,15 @@ def sellpass_page(request):
                 'data': seller_data,
                 }
     return render(request, 'seller/sellpass.html',context)
+
+def sellerorderdetails(request, order_id):
+    seller_data = Seller.objects.get(id=request.session['seller'])
+    order =OrderItem.objects.filter(order=order_id, seller=request.session['seller']).first()
+    context = {'order': order,'data': seller_data}
+    return render(request, 'seller/orderdetails.html', context)
+def mark_as_delivered(request, s_id,o_id):
+    order = OrderItem.objects.filter(seller=s_id,order=o_id)
+    for order in order:
+        order.item_status = 'delivered'
+        order.save()
+    return redirect('seller:orders')

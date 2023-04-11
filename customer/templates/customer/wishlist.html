@@ -13,7 +13,7 @@
           <h3>{{wish.product.product_name}}
           </h3>
           <h5>Seller:{{wish.product.seller.seller_name}}</h5>
-          <h4>Rs:{{wish.product.price}}</h4>
+          <h4>Rs:{{wish.product.price| stringformat:'d'}}</h4>
           <p class="btn-area">
             <span class="btn2"><a class="nav-link" href="{% url 'customer:remove_wish' wish.product.id %}"><i class="fa fa-trash"></i></a></span>
           </p>
@@ -27,7 +27,7 @@
   </div>
   {% else %}
   <div class="cart1 text-center fw-lighter mt-5 mb-5">
-    <h2>Whislist Empty</h2>
+    <img src="{% static 'img/wish.png' %}" alt="">
   </div>
   {% endif %}
 </div>

@@ -19,4 +19,11 @@ urlpatterns = [
     path('addwishlist/<int:pid>',views.add_to_wishlist, name="addwishlist"),
     path('checkout',views.checkout_page,name='checkout'),
     path('search',views.search_page,name='search'),
+    path('quantity',views.quantity,name='quantity'),
+    path('order',views.order_page,name='order'),
+    path('vieworder/<str:t_no>',views.view_order,name='vieworder'),
+    path('totalprice',views.total_price,name='total_price'),
+    path('payonline',views.payonline,name='payonline'),
+    path('placeorder',views.placeorder,name='placeorder'),
+    path('myorder',views.myorder_page,name='myorder'),
 ]

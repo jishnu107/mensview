@@ -30,10 +30,13 @@
         <div class="col-md-5">
           <form method = "POST">
             {% csrf_token %}
-          <h2>{{details.product_name}}</h2>
+            {% if details.trend %}
+          <span class="float-end"><img src="{% static 'img/trend.png' %}" width="70px" alt=""></span> 
+          {% endif %}
+          <h2>{{details.product_name}}</h2>    
           <p>Product Number:{{details.product_number}}</p>
           <p>{{details.product_description}}</p>
-          <p class="price">RS {{details.price}}</p>
+          <p class="price">RS {{details.price| stringformat:'d'}}</p>
           <p><b>Current Stock:{{details.current_stock}}</b></p>
           <p><b>Size</b></p>
           <p><select class="form-select" name="p_size" aria-label="Default select example">
@@ -44,19 +47,22 @@
             <option value="XXL">XXL</option>
           </select></p>
           <p>Seller:{{details.seller.seller_name}}</p>
+          {% if details.current_stock > 0 %}
           <button type="submit" class="btn btn-success cart">Add to cart</button>
-          <a href class="btn btn-success cart">BuyNow</a>
-          <a href="{% url 'customer:addwishlist' details.id %}">
-            {% if not product_exist %}
+          {% else %}
+          <span><img src="{% static 'img/outofstock.png' %}" width="170px" alt=""></span>
+          {%endif%}
+            {% if product_exist %}
+          <a href="{% url 'customer:remove_wish' details.id %}">
             <i class="fa fa-2xl fa-heart ms-2" aria-hidden="true" style="color: red;"></i>
-            {% else %}
-            <i class="fa fa-2xl fa-heart ms-2" aria-hidden="true"></i>
-            {% endif %}
           </a>
+            {% else %}
+          <a href="{% url 'customer:addwishlist' details.id %}">
+            <i class="fa fa-2xl fa-heart ms-2" aria-hidden="true"></i>
+          </a>
+            {% endif %}
           <p class="alert">{{msg}}</p>
             </form>
-
-
         </div>
     </div>
 </div>

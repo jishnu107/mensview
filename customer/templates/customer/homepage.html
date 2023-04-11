@@ -18,7 +18,7 @@
             <h5>{{product.product_name|title}}</h5>
           </div>
           <div class="cost mt-3 text-dark text-center">
-            <span>RS {{product.price}}</span>
+            <span>RS {{product.price| stringformat:'d'}}</span>
           </div>
           <a class="p-3 sheo nav-link text-center text-white mt-3 cursor" 
           href="{% url 'customer:detailspage' product.id %}">

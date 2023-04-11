@@ -139,20 +139,22 @@ body{
   margin-bottom: 30px;
   font-size: 20px;
 }
-.right-bar a{
+.check{
   background-color: #76bfb6;
   color: #fff;
-  text-decoration: none;
   display: block;
   text-align: center;
   height: 40px;
   line-height: 40px;
   font-weight: 900;
+  width: 100%;
+  border: none;
+  text-decoration: none;
 }
 .right-bar i{
   margin-left: 15px;
 }
-.right-bar a:hover{
+.check:hover{
   background-color: #397ca7;
 }
 

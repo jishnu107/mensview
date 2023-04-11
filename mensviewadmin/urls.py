@@ -4,6 +4,7 @@ from . import views
 app_name = 'mensviewadmin'
 urlpatterns = [
     path('master',views.master_page,name='master'),
+    path('adminlogin',views.adminlogin_page,name='adminlogin'),
     path('adminhome',views.adminhome_page,name='adminhome'),
     path('approve',views.approve_page,name='approve'),
     path('viewsellers',views.viewsellers_page,name='viewsellers'),

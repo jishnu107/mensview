@@ -25,7 +25,7 @@
             <h6>Seller:{{product.seller.seller_name|title}}</h6>
           </div>
           <div class="cost mt-3 text-dark text-center">
-            <span>{{product.price}}</span>
+            <span>{{product.price| stringformat:'d'}}</span>
           </div>
           <a class="p-3 sheo nav-link text-center text-white mt-3 cursor" 
           href="{% url 'seller:pdetails' product.id %}">

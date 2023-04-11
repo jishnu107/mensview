@@ -15,4 +15,6 @@ urlpatterns = [
     path('logout',views.logout,name='logout'),
     path('getstock', views.get_stock, name='getstock'),
     path('deleteprod/<int:sid>',views.delete_prod,name='deleteprod'),
+    path('orderdetails/<int:order_id>',views.sellerorderdetails,name='orderdetails'),
+    path('delivered/<int:s_id>/<int:o_id>',views.mark_as_delivered,name='delivered'),
 ]

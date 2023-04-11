@@ -31,7 +31,7 @@
             <h2>{{details.product_name}}</h2>
             <p>Product Number:{{details.product_number}}</p>
             <p>{{details.product_description}}</p>
-            <p class="price">RS {{details.price}}</p>
+            <p class="price">RS {{details.price| stringformat:'d'}}</p>
             <p><b>Current Stock:{{details.current_stock}}</b></p>
             <button class="btn btn-danger">
               <a href="{% url 'seller:deleteprod' details.id %}"

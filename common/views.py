@@ -2,6 +2,8 @@ from django.shortcuts import render,redirect
 from . models import Customer,Seller
 import random
 from seller.models import Product
+from django.http import JsonResponse
+from django.contrib import messages
 
 # Create your views here.
 from django.shortcuts import render
@@ -10,6 +12,7 @@ from django.shortcuts import render
 def commonhome_page(request):
     return render(request,'common/commonhome.html')
 def custreg_page(request):
+    msg=''
     if request.method == 'POST':
         c_name = request.POST['c_name']
         c_email = request.POST['c_email']
@@ -17,10 +20,13 @@ def custreg_page(request):
         c_number = request.POST['c_number']
         c_gender = request.POST['c_gender']
         c_password = request.POST['c_password']
+        if Customer.objects.filter(email_address=c_email).exists():
+            messages.error(request, 'A customer with this email address already exists.')
+            return redirect('common:custreg')
         new_customer = Customer(customer_name = c_name , email_address = c_email,address = c_address,phone_number = c_number,gender= c_gender,cust_password=c_password)
         new_customer.save()
         return redirect('common:custlogin')
-    return render(request,'common/custreg.html')
+    return render(request,'common/custreg.html',{'msg':msg})
 def sellreg_page(request):
     if request.method == 'POST':
         seller_name = request.POST['s_name']
@@ -35,6 +41,9 @@ def sellreg_page(request):
         seller_image = request.FILES['s_image']
         acc_number = request.POST['accnum']
         seller_pass = request.POST['s_password']
+        if Seller.objects.filter(seller_email=seller_email,comp_name =company_name,acc_number=acc_number).exists():
+            messages.error(request, 'A customer with this details already exists.')
+            return redirect('common:sellreg')
 
         seller_list = Seller(seller_name = seller_name,seller_email = seller_email,address = seller_address,phone_number = seller_number, 
                       gender = gender,comp_name = company_name,accholder_name = accholder, ifsc = ifsc,  branch = branch, acc_number=acc_number,
@@ -53,8 +62,7 @@ def selllogin_page(request):
             seller = Seller.objects.get(seller_email = sell_email, seller_pass = sell_password,approved = True)
             request.session['seller'] = seller.id
             return redirect('seller:homepage')
-        except:
-            
+        except:  
              msg = 'email or password incorrect'
 
     return render(request,'common/selllogin.html',{'msg':msg})
@@ -77,3 +85,9 @@ def allview_page(request):
     context ={'prods': product_list,
             }
     return render(request,'common/allview.html',context)
+def email_exist(request):
+    email = request.POST['email']
+
+    status = Customer.objects.filter(email_address = email).exists()
+
+    return JsonResponse({'status':status})

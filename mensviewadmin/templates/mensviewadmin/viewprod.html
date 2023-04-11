@@ -26,7 +26,7 @@
             <td>
               <img src=" {{product.product_image.url}}" style="height: 50px; width: 50px;" class="rounded" alt="...">
             </td>
-            <td>{{product.price}}</td>
+            <td>{{product.price| stringformat:'d'}}</td>
             <td>
               {% if not product.trend %}
               <button class="btn btn-success">

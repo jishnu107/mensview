@@ -201,7 +201,20 @@ footer .copyright{
   flex-direction: column;
   transition: all .6s ease;
 }
+.card1{
+  width: 100%;
+  background-color: white;
+  border-radius: 20px;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  transition: all .6s ease;
+}
 .card:hover{
+  transform: scale(1.02);
+}
+.card1:hover{
   transform: scale(1.02);
 }
 .text{

@@ -7,6 +7,8 @@ from django.conf import settings
 # Create your views here.
 def master_page(request):   
     return render(request,'mensviewadmin/master.html')
+def adminlogin_page(request):
+    return render(request,'mensviewadmin/adminlogin.html')
 def adminhome_page(request):
     customers = Customer.objects.all()
     cust_count = customers.count()
@@ -24,19 +26,19 @@ def adminhome_page(request):
     }
     return render(request,'mensviewadmin/adminhome.html',context)
 def approve_page(request):
-    sellers = Seller.objects.filter(approved = False)
+    sellers = Seller.objects.filter(approved = False).order_by('id')
     return render(request,'mensviewadmin/approve.html',{'seller_app':sellers})
 def viewsellers_page(request):
-    sellers = Seller.objects.filter(approved=True)
+    sellers = Seller.objects.filter(approved=True).order_by('id')
     return render(request,'mensviewadmin/viewsellers.html',{'seller_list':sellers})
 def viewcust_page(request):
-    customers = Customer.objects.all()
+    customers = Customer.objects.all().order_by('id')
     context = {
         'customer_list':customers
     }
     return render(request,'mensviewadmin/viewcust.html',context)
 def viewprod_page(request):
-    product_list = Product.objects.all()
+    product_list = Product.objects.all().order_by('trend')
     seller_data = Seller.objects.all()
     context =  {'prods': product_list,
                 'data': seller_data,
@@ -44,13 +46,20 @@ def viewprod_page(request):
     return render(request,'mensviewadmin/viewprod.html',context)
 def approve(request,sid):
     seller=Seller.objects.get(id=sid)
+    message = ' Welcome to MENSVIEW OFFICIAL SHOPPING WEBSITE you can now login to your account, Thanks you'
+    send_mail(
+        'Login Approved',
+        message,
+        settings.EMAIL_HOST_USER,
+        [seller.seller_email,], 
+    )
     seller.approved=True
     seller.save()
     return redirect('mensviewadmin:viewsellers')
 def delete_seller(request,sid):
     seller_list = Seller.objects.get(id = sid)
     seller_list.delete()
-    return redirect('mensviewadmin:sellerview')
+    return redirect('mensviewadmin:viewsellers')
 def delete_cust(request,sid):
     cust_list = Customer.objects.get(id = sid)
     cust_list.delete()

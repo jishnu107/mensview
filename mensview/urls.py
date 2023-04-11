@@ -23,6 +23,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('projadmin/',include('mensviewadmin.urls')),
     path('customer/',include('customer.urls')),
-    path('common/',include('common.urls')),
+    path('',include('common.urls')),
     path('seller/',include('seller.urls')),
 ]+static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
