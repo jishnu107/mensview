@@ -5,22 +5,23 @@
   {% if cart_list %}
   <h1>cart</h1>
   <div class="project">
-    <div class="shop">
+    <div class="shop scroll" style="height: 500px; overflow: auto; overflow-x: hidden;">
       {% for cart in cart_list %}
       <div class="box shadow prod_data">
         <img src="{{cart.product.product_image.url}}" alt="">
         <div class="content">   
           <h3>{{cart.product.product_name}}
             <p>Size:{{cart.product_size}}</p>
-          </h3>
-          <h4>Rs:{{cart.product.price| stringformat:'d'}}</h4>
-          <input type="hidden" class="prod_id" value="{{cart.product.id}}">
+            <input type="hidden" class="prod_id" value="{{cart.product.id}}">
           {% csrf_token %}
           <p class="unit">quantity: <input type="number" class="qty changeqty" data-item="{{cart.product.id}}" id="quantity" value="{{cart.product_quantity}}" data-product-id="{{cart.product.id}}"   min="1" max="{{cart.product.current_stock}}"></p>
           <p class="amt" hidden id="amt{{cart.product.id}}">{{cart.total}}</p>
+          </h3>
+          <h5>Rs:{{cart.product.price| stringformat:'d'}}</h5>
           <p class="btn-area">
+            <span class="btn4"><a href="{% url 'customer:remove_cart' cart.product.id %}">
             <i class="fa fa-trash"></i>
-            <span class="btn4"><a href="{% url 'customer:remove_cart' cart.product.id %}">Remove</a></span>
+            </a></span>
           </p>
         </div>
       </div>
@@ -46,46 +47,4 @@
 <br>
 <br>
 <br>
-
-<script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
-<script>
-  $(document).ready(function(){
-    displayTotal()
-    $.ajaxSetup({
-    headers: {
-      "X-CSRFToken": '{{ csrf_token }}'
-    }
-  })
-
-  $('input').change(function(){
-    let qty = $(this).val()
-    let pid = $(this).attr('data-item')
-    $.ajax({
-    url : "{% url 'customer:total_price' %}",
-    data : {
-      'qty' : qty,
-      'pid' : pid
-    },
-    method : 'POST' ,
-    success : function(response){
-      $('#amt'+pid).text(response.total)
-     console.log(response.total)
-     displayTotal()
-    }
-  })
-  })
-  })
-  function displayTotal(){
-    let total = 0
-    let deliver = 50
-    let amt = $(".amt")
-    for(let i=0;i<amt.length;i++){
-     total = total + parseInt(amt[i].textContent)
-    }
-    grand = total+deliver
-    $('#Total').html(total)
-    $('#Grandtotal').html(grand)
-
-  }
-</script>
 {% endblock %}

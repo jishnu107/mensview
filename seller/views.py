@@ -11,8 +11,9 @@ def home_page(request):
     seller_data = Seller.objects.get(id=request.session['seller'])
     seller_products = Product.objects.filter(seller = request.session['seller'])
     products_count = seller_products.count()
-    order =OrderItem.objects.filter(seller=request.session['seller'])
-    order_count = order.count()
+    order =OrderItem.objects.filter(seller=request.session['seller']).order_by('-id')[:7]
+    orderitem =OrderItem.objects.filter(seller=request.session['seller'])
+    order_count = orderitem.count()
     delivered = OrderItem.objects.filter(seller=request.session['seller'],item_status='delivered')
     delivered_count = delivered.count()
     percentage = (delivered_count / order_count) * 100 if delivered_count > 0 else 0

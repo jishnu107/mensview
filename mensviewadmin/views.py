@@ -1,5 +1,6 @@
 from django.shortcuts import render,redirect
 from common.models import Customer,Seller
+from customer.models import OrderItem
 from seller.models import Product
 from django.core.mail import send_mail
 from django.conf import settings
@@ -10,19 +11,28 @@ def master_page(request):
 def adminlogin_page(request):
     return render(request,'mensviewadmin/adminlogin.html')
 def adminhome_page(request):
+    last_five_cust = Customer.objects.order_by('-id')[:6]
+    last_five_sell = Seller.objects.order_by('-id')[:6]
     customers = Customer.objects.all()
     cust_count = customers.count()
     product_list = Product.objects.all()
     prod_count = product_list.count()
     sellers = Seller.objects.filter(approved=True)
     sellers_count = sellers.count()
+    order =OrderItem.objects.all()
+    order_count = order.count()
+    delivered = OrderItem.objects.filter(item_status='delivered')
+    delivered_count = delivered.count()
+    percentage = (delivered_count / order_count) * 100 if delivered_count > 0 else 0
     context = {
-        'customer_list':customers,
         'seller_list':sellers,
         'prods': product_list,
         'cust_count':cust_count,
         'prod_count':prod_count,
-        'sellers_count':sellers_count
+        'sellers_count':sellers_count,
+        'percentage':percentage,
+        'last_five_cust':last_five_cust,
+        'last_five_sell':last_five_sell,
     }
     return render(request,'mensviewadmin/adminhome.html',context)
 def approve_page(request):

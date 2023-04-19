@@ -23,6 +23,9 @@
   .rounded-full {
     border-radius: 100%;
   }
+  #wrapper {
+    overflow-x: hidden;
+  }
   
   #sidebar-wrapper {
     min-height: 100vh;
@@ -66,7 +69,7 @@
     border: none;
   }
   
-  @media (min-width: 412px) {
+  @media (min-width: 768px) {
     #sidebar-wrapper {
       margin-left: 0;
     }
@@ -92,4 +95,3 @@
     font-weight: bold;
 }
 
- 

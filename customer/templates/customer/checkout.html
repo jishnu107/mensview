@@ -49,7 +49,7 @@
     <div class="col-sm-4 offset-sm-1">
       <h4>Items</h4>
       <hr>
-      <div class="card1 border mb-2" style="height: 300px; overflow: auto;">
+      <div class="card1 border mb-2 scroll" style="height: 300px; overflow: auto;">
         <div class="card-body ">
           <div class="table-responsive">
             <table class="table">
@@ -113,91 +113,4 @@
 <br>
 <br>
 <br>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-<script>
-$(document).ready(function () {
-
-  $('.paywithrazorpay').click (function(e){
-      e.preventDefault();
-
-      var first_name =$("[name='first_name']").val();
-      var last_name =$("[name='last_name']").val();
-      var address =$("[name='address']").val();
-      var city =$("[name='city']").val();
-      var state =$("[name='state']").val();
-      var ph_number =$("[name='ph_number']").val();
-      var country =$("[name='country']").val();
-      var pincode =$("[name='pincode']").val();
-      var token = $("[name='csrfmiddlewaretoken']").val();
-
-      if(first_name == "" || last_name == "" || address == "" || city == "" || state == "" || ph_number == "" || country == "" || pincode == "")
-      {
-        swal("Alert!", "All fields are mandatory!", "error");
-        return false;
-      }
-      else
-      {
-        $.ajax({
-          method:"GET",
-          url:"{% url 'customer:payonline' %}",
-          success:function(response){
-            // console.log(response.total_price)
-            var options = {
-          "key": "rzp_test_GwlpAnWWTXXplE", // Enter the Key ID generated from the Dashboard
-          "amount":response.total_price*100, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-          "currency": "INR",
-          "name": "Mensview", //your business name
-          "description": "Tank you for buying",
-          "image": "https://example.com/your_logo",
-          // "order_id": "order_9A33XWu170gUtm", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-          "handler": function (response){
-              // alert(response.razorpay_payment_id);
-              data = {
-                "first_name": first_name,   
-                "last_name":last_name,
-                "address": address,
-                "city": city,
-                "state": state,
-                "ph_number": ph_number,
-                "country":country, 
-                "pincode": pincode,
-                "payment_mode":"paid by razorpay",
-                "payment_id":response.razorpay_payment_id,
-                csrfmiddlewaretoken: token,
-              }
-              $.ajax({
-                method:"POST",
-                url:"{% url 'customer:placeorder' %}",
-                data:data,
-                success:function(response){
-                    swal("congratulation!","your order has been placed","success").then((value) => {
-                      window.location.replace("{% url 'customer:order' %}");
-                    });
-                }
-              });
-          },
-          "prefill": {
-              "name": first_name+""+last_name, //your customer's name
-              // "email": email,
-              "contact": ph_number
-          },
-          "notes": {
-              "address": "Razorpay Corporate Office"
-          },
-          "theme": {
-              "color": "#3399cc"
-          }
-        };
-        var rzp1 = new Razorpay(options);
-        rzp1.open();
-            
-          }
-        });
-       
-      }
-    });
-});
-</script>
-
 {% endblock %}

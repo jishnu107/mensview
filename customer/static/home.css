@@ -248,6 +248,9 @@ footer .copyright{
 #hero {
   background-image: url('img/menshero.jpg');
 }
+.scroll::-webkit-scrollbar {
+  display: none;
+}
 
 
 

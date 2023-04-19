@@ -47,7 +47,7 @@
           <div class="col-md-3">
             <div class="p-3 bg-white shadow-sm d-flex justify-content-around align-items-center rounded">
               <div>
-                <h3 class="fs-2">%25</h3>
+                <h3 class="fs-2">%{{percentage| stringformat:'d'}}</h3>
                 <p class="fs-5">profit</p>
               </div>
               <i class="fas fa-chart-line fs-1 primary-text border rounded-full secondary-bg p-3"></i>
@@ -56,7 +56,7 @@
         </div>
 
         <div class="row my-5">
-          <div class="col-lg">
+          <div class="col-lg" style="height: 300px;">
             <h3 class="fs-4 mb-3">Recent Approvels</h3>
             <table class="table bg-white rounded shadow-sm  table-hover text-center">
               <thead>
@@ -67,7 +67,7 @@
                 </tr>
               </thead>
               <tbody>
-                {% for seller in seller_list %}
+                {% for seller in last_five_sell %}
                 <tr>
                   <td>{{seller.seller_name|upper}}</td>
                   <td>{{seller.comp_name}}</td>
@@ -85,7 +85,6 @@
             <h3 class="fs-4 mb-3">Recent customers</h3>
             <table class="table bg-white rounded shadow-sm  table-hover text-center">
               <thead>
-
                 <tr>
                   <th scope="col">Name</th>
                   <th scope="col">Email</th>
@@ -93,36 +92,13 @@
                 </tr>
               </thead>
               <tbody>
-                {% for customer in customer_list %}
-
+                {% for customer in last_five_cust %}
                 <tr>
                   <td>{{customer.customer_name|upper}}</td>
                   <td>{{customer.email_address}}</td>
                   <td>{{customer.phone_number}}</td>
                 </tr>
                 {% endfor %}
-
-              </tbody>
-            </table>
-          </div>
-          <div class="col-lg">
-            <h3 class="fs-4 mb-3">Recent Purchase</h3>
-            <table class="table bg-white rounded shadow-sm  table-hover text-center">
-              <thead>
-                <tr>
-                  <th scope="col" width="50">#</th>
-                  <th scope="col">Product</th>
-                  <th scope="col">Customer</th>
-                  <th scope="col">Price</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th scope="row">1</th>
-                  <td>Television</td>
-                  <td>Jonny</td>
-                  <td>$1200</td>
-                </tr>
               </tbody>
             </table>
           </div>

@@ -26,8 +26,6 @@
         <div class="searchbox ms-5">
           <form class="d-flex" role="search" action="{% url 'customer:search' %}">
             {% csrf_token %}
-            <input class="form-control me-2 rounded-pill" type="search" name='searchdata' placeholder="Search" aria-label="Search">
-            <button class="btn" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
           </form>
         </div>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02"

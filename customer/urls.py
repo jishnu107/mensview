@@ -16,7 +16,7 @@ urlpatterns = [
     path('remove_cart/<int:pid>',views.remove_item,name='remove_cart'),
     path('remove_wish/<int:pid>',views.removewish_item,name='remove_wish'),
     path('logout',views.logout,name='logout'),
-    path('addwishlist/<int:pid>',views.add_to_wishlist, name="addwishlist"),
+    # path('addwishlist/<int:pid>',views.add_to_wishlist, name="addwishlist"),
     path('checkout',views.checkout_page,name='checkout'),
     path('search',views.search_page,name='search'),
     path('quantity',views.quantity,name='quantity'),
@@ -26,4 +26,5 @@ urlpatterns = [
     path('payonline',views.payonline,name='payonline'),
     path('placeorder',views.placeorder,name='placeorder'),
     path('myorder',views.myorder_page,name='myorder'),
+    path('addtowishlist',views.add_to_wishlist, name="addtowishlist"),
 ]

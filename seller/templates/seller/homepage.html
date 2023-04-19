@@ -61,7 +61,7 @@
             <td>{{order.product.product_name | title}}</td>
             <td>{{order.order.customer.customer_name | title}}</td>
             <td>RS:{{order.price| stringformat:'d'}}</td>
-            <td>{{order.order.status | title}}</td>
+            <td>{{order.item_status | title}}</td>
           </tr>
           {% endfor %}
         </tbody>

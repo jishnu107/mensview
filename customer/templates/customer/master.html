@@ -167,7 +167,6 @@
     integrity="sha512-9CWGXFSJ+/X0LWzSRCZFsOPhSfm6jbnL+Mpqo0o8Ke2SYr8rCTqb4/wGm+9n13HtDE1NQpAEOrMecDZw4FXQGg=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script>
     $(document).ready(function () {
       $(".owl-carousel").owlCarousel({
@@ -190,7 +189,7 @@
   </script>
 
 
-  <!-- total price and quantity -->
+  <!-- quantity change -->
   <script>
     $(document).ready(function () {
       $.ajaxSetup({
@@ -210,7 +209,7 @@
           data: {
             'product_id': product_id,
             'product_qty': product_qty
-          }, 
+          },
           success: function (response) {
             console.log(response.status)
           }
@@ -218,6 +217,169 @@
       })
     })
   </script>
+
+  <script>
+    $(document).ready(function () {
+      $.ajaxSetup({
+        headers: {
+          "X-CSRFToken": '{{ csrf_token }}'
+        }
+      })
+      $('.addtowishlist').click(function (e) {
+        e.preventDefault();
+
+        var product_id = $(this).closest('.prod_data').find('.prod_id').val();
+        var button = $(this);
+        $.ajax({
+          method: 'POST',
+          url: "{% url 'customer:addtowishlist' %}",
+          data: {
+            'product_id': product_id
+          },
+          success: function (response) {
+            button.toggleClass('in-wishlist');
+            if (button.hasClass('in-wishlist')) {
+              button.css('color','red');
+            }
+            else {
+              button.color('color','black');
+            }
+          }
+        })
+      })
+    })
+  </script>
+
+  <!-- total price and grand total -->
+
+  <script>
+    $(document).ready(function () {
+      displayTotal()
+      $.ajaxSetup({
+        headers: {
+          "X-CSRFToken": '{{ csrf_token }}'
+        }
+      })
+
+      $('input').change(function () {
+        let qty = $(this).val()
+        let pid = $(this).attr('data-item')
+        $.ajax({
+          url: "{% url 'customer:total_price' %}",
+          data: {
+            'qty': qty,
+            'pid': pid
+          },
+          method: 'POST',
+          success: function (response) {
+            $('#amt' + pid).text(response.total)
+            console.log(response.total)
+            displayTotal()
+          }
+        })
+      })
+    })
+    function displayTotal() {
+      let total = 0
+      let deliver = 50
+      let amt = $(".amt")
+      for (let i = 0; i < amt.length; i++) {
+        total = total + parseInt(amt[i].textContent)
+      }
+      grand = total + deliver
+      $('#Total').html(total)
+      $('#Grandtotal').html(grand)
+
+    }
+  </script>
+
+  <!-- Razorpay -->
+
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <script>
+    $(document).ready(function () {
+
+      $('.paywithrazorpay').click(function (e) {
+        e.preventDefault();
+
+        var first_name = $("[name='first_name']").val();
+        var last_name = $("[name='last_name']").val();
+        var address = $("[name='address']").val();
+        var city = $("[name='city']").val();
+        var state = $("[name='state']").val();
+        var ph_number = $("[name='ph_number']").val();
+        var country = $("[name='country']").val();
+        var pincode = $("[name='pincode']").val();
+        var token = $("[name='csrfmiddlewaretoken']").val();
+
+        if (first_name == "" || last_name == "" || address == "" || city == "" || state == "" || ph_number == "" || country == "" || pincode == "") {
+          swal("Alert!", "All fields are mandatory!", "error");
+          return false;
+        }
+        else {
+          $.ajax({
+            method: "GET",
+            url: "{% url 'customer:payonline' %}",
+            success: function (response) {
+              // console.log(response.total_price)
+              var options = {
+                "key": "rzp_test_GwlpAnWWTXXplE", // Enter the Key ID generated from the Dashboard
+                "amount": response.total_price * 100, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                "currency": "INR",
+                "name": "Mensview", //your business name
+                "description": "Tank you for buying",
+                "image": "https://example.com/your_logo",
+                // "order_id": "order_9A33XWu170gUtm", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+                "handler": function (response) {
+                  // alert(response.razorpay_payment_id);
+                  data = {
+                    "first_name": first_name,
+                    "last_name": last_name,
+                    "address": address,
+                    "city": city,
+                    "state": state,
+                    "ph_number": ph_number,
+                    "country": country,
+                    "pincode": pincode,
+                    "payment_mode": "paid by razorpay",
+                    "payment_id": response.razorpay_payment_id,
+                    csrfmiddlewaretoken: token,
+                  }
+                  $.ajax({
+                    method: "POST",
+                    url: "{% url 'customer:placeorder' %}",
+                    data: data,
+                    success: function (response) {
+                      swal("congratulation!", "your order has been placed", "success").then((value) => {
+                        window.location.replace("{% url 'customer:order' %}");
+                      });
+                    }
+                  });
+                },
+                "prefill": {
+                  "name": first_name + "" + last_name, //your customer's name
+                  // "email": email,
+                  "contact": ph_number
+                },
+                "notes": {
+                  "address": "Razorpay Corporate Office"
+                },
+                "theme": {
+                  "color": "#3399cc"
+                }
+              };
+              var rzp1 = new Razorpay(options);
+              rzp1.open();
+
+            }
+          });
+
+        }
+      });
+    });
+  </script>
+
 
 
 

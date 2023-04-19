@@ -109,21 +109,20 @@ def logout(request):
 @auth_customer
 def wishlist_page(request):
     product_wishlist = Wishlist.objects.filter(
-        customer=request.session['customer'])
-    return render(request, 'customer/wishlist.html', {'wish_list': product_wishlist})
+customer=request.session['customer'])
+    context={'wish_list': product_wishlist}
+    return render(request, 'customer/wishlist.html',context)
 
 
-def add_to_wishlist(request, pid):
-    product_exist = Wishlist.objects.filter(
-        product=pid, customer=request.session['customer']).exists()
-    if not product_exist:
-        wishlist = Wishlist(
-            customer_id=request.session['customer'], product_id=pid)
-        wishlist.save()
-        return redirect('customer:allview')
+# def add_to_wishlist(request, pid):
+#     product_exist = Wishlist.objects.filter(product=pid, customer=request.session['customer']).exists()
+#     if not product_exist:
+#         wishlist = Wishlist(customer_id=request.session['customer'], product_id=pid)
+#         wishlist.save()
+#         return redirect('customer:wishlist')
 
-    else:
-        return redirect('customer:wishlist')
+#     else:
+#         return redirect('customer:wishlist')
 
 
 def removewish_item(request, pid):
@@ -195,7 +194,19 @@ def quantity(request):
             cart.product_quantity = prod_qty
             cart.save()
             return JsonResponse({'success': True})
-
+        
+def add_to_wishlist(request):
+    if request.method == 'POST':
+        prod_id = int(request.POST.get('product_id'))
+        product_exist = Wishlist.objects.filter(product=prod_id, customer=request.session['customer']).exists()
+        if not product_exist:
+            wishlist = Wishlist(customer_id=request.session['customer'], product_id=prod_id)
+            wishlist.save() 
+            return JsonResponse({'status':'success'})
+        else:
+            return JsonResponse({'status':'error', 'message': 'Product already exists in wishlist'})
+    else:
+        return HttpResponse(status=405)
 @auth_customer
 def order_page(request):
     orders = Order.objects.filter(customer=request.session['customer'])

@@ -2,9 +2,10 @@
 {% load static %}
 {% block content %}
 <div class="container mt-5">
-    <h1 class="mb-3">My Orders</h1>
+    {% if orders %}
+    <h1 class="mb-3 text-center">My Orders</h1>
     <div class="row">
-        <div class="col-md-12">
+        <div class=" scroll col-md-12" style="height: 477px; overflow: auto;">
             <table class="table">
                 <tbody>
                     <tr>
@@ -29,5 +30,8 @@
             </table>
         </div>
     </div>
+    {% else %}
+    <img src="{% static 'img/cart.png' %}" alt="">
+    {% endif %}
 </div>
 {% endblock %}

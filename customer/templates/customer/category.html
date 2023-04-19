@@ -15,7 +15,7 @@
                 <a href="{% url 'customer:categorywise' 'Innerwears' %}" class="list-group-item list-group-item-action">Innerwears</a>
             </div>
         </div>
-        <div class="col-sm-8 offset-sm-1">
+        <div class="col-sm-8 offset-sm-1 scroll" style="height: 600px; overflow: auto; overflow-x: hidden;">
             <div class="row m-auto">
                 {% for product in prods %}
                 <div class="col-md-4 mt-3 ">
