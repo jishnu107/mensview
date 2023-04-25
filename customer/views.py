@@ -4,7 +4,7 @@ from common.models import Customer, Seller
 from .models import Cart, Wishlist, Order, OrderItem
 from .auth_gaurd import auth_customer
 from django.db.models import Q, F
-from django.http import JsonResponse,HttpResponse
+from django.http import JsonResponse, HttpResponse
 import random
 # from .models import Cart
 
@@ -109,9 +109,9 @@ def logout(request):
 @auth_customer
 def wishlist_page(request):
     product_wishlist = Wishlist.objects.filter(
-customer=request.session['customer'])
-    context={'wish_list': product_wishlist}
-    return render(request, 'customer/wishlist.html',context)
+        customer=request.session['customer'])
+    context = {'wish_list': product_wishlist}
+    return render(request, 'customer/wishlist.html', context)
 
 
 # def add_to_wishlist(request, pid):
@@ -128,8 +128,13 @@ customer=request.session['customer'])
 def removewish_item(request, pid):
     wishlist_item = Wishlist.objects.get(
         product=pid, customer=request.session['customer'])
+    wishlist = request.session.get('wishlist', [])
+    if pid in wishlist:
+        wishlist.remove(pid)
+        request.session['wishlist'] = wishlist
     wishlist_item.delete()
     return redirect('customer:wishlist')
+
 
 @auth_customer
 def checkout_page(request):
@@ -154,6 +159,7 @@ def search_page(request):
         return render(request, 'customer/searchprod.html', {'searchprod': searchproducts})
     else:
         return redirect('customer/search')
+
 
 @auth_customer
 def pass_page(request):
@@ -194,19 +200,29 @@ def quantity(request):
             cart.product_quantity = prod_qty
             cart.save()
             return JsonResponse({'success': True})
-        
+
+
 def add_to_wishlist(request):
     if request.method == 'POST':
         prod_id = int(request.POST.get('product_id'))
-        product_exist = Wishlist.objects.filter(product=prod_id, customer=request.session['customer']).exists()
-        if not product_exist:
-            wishlist = Wishlist(customer_id=request.session['customer'], product_id=prod_id)
-            wishlist.save() 
-            return JsonResponse({'status':'success'})
+        wishlist = request.session.get('wishlist', [])
+        product_exist = Wishlist.objects.filter(
+            product=prod_id, customer=request.session['customer']).exists()
+        if prod_id not in wishlist:
+            wishlist.append(prod_id)
+            request.session['wishlist'] = wishlist
+            if not product_exist:
+                wishlist = Wishlist(
+                    customer_id=request.session['customer'], product_id=prod_id)
+                wishlist.save()
+                return JsonResponse({'status': 'success'})
+            else:
+                return JsonResponse({'status': 'error', 'message': 'Product already exists in wishlist.'})
         else:
-            return JsonResponse({'status':'error', 'message': 'Product already exists in wishlist'})
-    else:
-        return HttpResponse(status=405)
+            return JsonResponse({'status': 'error', 'message': 'Product already exists in wishlist.'})
+    return redirect('customer:wishlist')
+
+
 @auth_customer
 def order_page(request):
     orders = Order.objects.filter(customer=request.session['customer'])
@@ -214,6 +230,7 @@ def order_page(request):
         'orders': orders
     }
     return render(request, 'customer/order.html', context)
+
 
 @auth_customer
 def view_order(request, t_no):
@@ -233,6 +250,8 @@ def total_price(request):
     product = Product.objects.filter(id=pid).values('price')
     total = int(qty)*product[0]['price']
     return JsonResponse({'total': total})
+
+
 def placeorder(request):
     if request.method == 'POST':
         neworder = Order()
@@ -279,15 +298,19 @@ def placeorder(request):
         cart_item = Cart.objects.filter(customer=request.session['customer'])
         cart_item.delete()
         paymode = request.POST.get('payment_mod')
-        if(paymode=='paid by razorpay'):
-            return JsonResponse({'status':'your order has been placed successfully'})
+        if (paymode == 'paid by razorpay'):
+            return JsonResponse({'status': 'your order has been placed successfully'})
 
     return redirect('customer:homepage')
+
+
 def payonline(request):
     cart = Cart.objects.filter(customer=request.session['customer'])
     total_price = 50
     for item in cart:
         total_price = total_price+item.product.price*item.product_quantity
     return JsonResponse({'total_price': total_price})
+
+
 def myorder_page(request):
     return HttpResponse('my order')

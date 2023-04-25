@@ -91,3 +91,21 @@ def email_exist(request):
     status = Customer.objects.filter(email_address = email).exists()
 
     return JsonResponse({'status':status})
+def sellermail_exist(request):
+    email = request.POST['email']
+
+    status = Seller.objects.filter(seller_email = email).exists()
+
+    return JsonResponse({'status':status})
+def compname_exist(request):
+    compname = request.POST['compname']
+
+    status = Seller.objects.filter(comp_name = compname).exists()
+
+    return JsonResponse({'status':status})
+def accno_exist(request):
+    accno = request.POST['accno']
+
+    status = Seller.objects.filter(acc_number = accno).exists()
+
+    return JsonResponse({'status':status})

@@ -13,11 +13,12 @@
                             {{msg}}
                             <div class="mb-3">
                                 <label for="exampleFormControlInput1" class="form-label">Product Name</label>
-                                <input type="name" name='p_name' class="form-control" id="exampleFormControlInput1">
+                                <input type="name" required name='p_name' class="form-control" id="prodname">
+                                <span id="product_error"></span>
                             </div>
                             <div class="mb-3">
                                 <label for="exampleFormControlInput1" class="form-label">Product Category</label>
-                                <select class="form-select" name="p_cat" aria-label="Default select example">
+                                <select class="form-select" required name="p_cat" aria-label="Default select example">
                                     <option selected>Select product category</option>
                                     <option value="Shirt">Shirt</option>
                                     <option value="T-shirt">T-shirt</option>
@@ -30,26 +31,31 @@
                             </div>
                             <div class="mb-3">
                                 <label for="exampleFormControlTextarea1" class="form-label">Product Describtion</label>
-                                <textarea class="form-control" name='p_description' id="exampleFormControlTextarea1"
+                                <textarea class="form-control" required name='p_description' id="exampleFormControlTextarea1"
                                     rows="3"></textarea>
                             </div>
                             <div class="mb-3">
                                 <label for="exampleFormControlInput1" class="form-label">Product Number</label>
-                                <input type="number" name='p_number' class="form-control" id="exampleFormControlInput1">
+                                <input type="number" name='p_number' required class="form-control" id="exampleFormControlInput1">
                             </div>
                             <div class="mb-3">
                                 <label for="exampleFormControlInput1" class="form-label">Current Stock</label>
-                                <input type="number" name='current_stock' class="form-control"
+                                <input type="number" required name='current_stock' class="form-control"
                                     id="exampleFormControlInput1">
                             </div>
                             <div class="mb-3">
                                 <label for="formFile" class="form-label">Product Image</label>
-                                <input class="form-control" name='p_image' type="file" id="formFile">
+                                <input class="form-control" required name='p_image' type="file" id="formFile">
                             </div>
                             <div class="mb-3">
                                 <label for="exampleFormControlInput1" class="form-label">Price</label>
-                                <input type="number" name='price' class="form-control" id="exampleFormControlInput1">
+                                <input type="number" required name='price' class="form-control" id="exampleFormControlInput1">
                             </div>
+                            {% if messages %}
+                            {% for message in messages %}
+                            <p style="color: red;" class="alert alert-{{ message.tags }}">{{ message }}</p>
+                            {% endfor %}
+                            {% endif %}
                             <button type="submit" class="btn2">Add Product</button>
                         </form>
                     </div>
@@ -58,4 +64,43 @@
         </div>
     </div>
 </div>
+<script>
+    $('#prodname').change(function () {
+        $.ajaxSetup({
+            headers: {
+                "X-CSRFToken": $('[name=csrfmiddlewaretoken]').val()
+            }
+        })
+
+        $.ajax({
+
+            url: '{% url "seller:product_exist" %}',
+            type: 'POST',
+
+            data: {
+                product: $(this).val()
+            },
+            success: function (response) {
+                var product_error = $('#product_error')
+                var prodname = $('#prodname')
+
+
+                if (response.status == true) {
+                    $('#product_error').html('Product already exist').css('color', 'red')
+                    $('#prodname').css('border', '2px solid red')
+                }
+                else {
+                    $('#product_error').html('Success').css('color', 'green')
+                    $('#prodname').css('border', '2px solid green')
+
+
+                }
+
+                console.log(response.status)
+            }
+
+        })
+
+    })
+</script>
 {% endblock %}

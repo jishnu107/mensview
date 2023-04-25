@@ -12,12 +12,11 @@ def adminlogin_page(request):
     return render(request,'mensviewadmin/adminlogin.html')
 def adminhome_page(request):
     last_five_cust = Customer.objects.order_by('-id')[:6]
-    last_five_sell = Seller.objects.order_by('-id')[:6]
     customers = Customer.objects.all()
     cust_count = customers.count()
     product_list = Product.objects.all()
     prod_count = product_list.count()
-    sellers = Seller.objects.filter(approved=True)
+    sellers = Seller.objects.filter(approved=True).order_by('-id')[:6]
     sellers_count = sellers.count()
     order =OrderItem.objects.all()
     order_count = order.count()
@@ -32,7 +31,6 @@ def adminhome_page(request):
         'sellers_count':sellers_count,
         'percentage':percentage,
         'last_five_cust':last_five_cust,
-        'last_five_sell':last_five_sell,
     }
     return render(request,'mensviewadmin/adminhome.html',context)
 def approve_page(request):

@@ -10,5 +10,8 @@ urlpatterns = [
     path('custlogin',views.custlogin_page,name='custlogin'),
     path('allview',views.allview_page,name='allview'), 
     path('email_exist',views.email_exist,name='email_exist'),
+    path('sellermail_exist',views.sellermail_exist,name='sellermail_exist'),
+    path('compname_exist',views.compname_exist,name='compname_exist'),
+    path('accno_exist',views.accno_exist,name='accno_exist'),
     # path('details',views.productdetails_page,name='detailspage'),    
 ]

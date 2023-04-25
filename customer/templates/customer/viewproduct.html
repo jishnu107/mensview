@@ -11,10 +11,10 @@
             <img src="{{details.product_image.url}}" class="d-block w-100" style="height: 400px;" alt="...">
           </div>
           <div class="carousel-item">
-            <img src="..." class="d-block w-100" alt="...">
+            <img src="{{details.product_image.url}}" class="d-block w-100" style="height: 400px;" alt="...">
           </div>
           <div class="carousel-item">
-            <img src="..." class="d-block w-100" alt="...">
+            <img src="{{details.product_image.url}}" class="d-block w-100" style="height: 400px;" alt="...">
           </div>
         </div>
         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"
@@ -55,7 +55,7 @@
         {% else %}
         <span><img src="{% static 'img/outofstock.png' %}" width="170px" alt=""></span>
         {%endif%}
-        {% if is_in_wishlist %}
+        {% if details.id in request.session.wishlist %}
         <span class="addtowishlist">
           <i class="fa fa-2xl fa-heart ms-2" aria-hidden="true" style="color: red;"></i>
         </span>
@@ -64,6 +64,7 @@
           <i class="fa fa-2xl fa-heart ms-2" aria-hidden="true"></i>
         </span>
         {% endif %}
+        
         <!-- {% if product_exist %}
         <a href="">
           <i class="fa fa-2xl fa-heart ms-2" aria-hidden="true" style="color: red;"></i>
@@ -73,7 +74,10 @@
           <i class="fa fa-2xl fa-heart ms-2" aria-hidden="true"></i>
         </a>
         {% endif %} -->
-        <p class="alert">{{msg}}</p>
+        {% if message %}
+        <p>{{message}}</p>
+        {% endif %}
+        <p class="alert" id="alert">{{msg}}</p>
       </form>
     </div>
   </div>

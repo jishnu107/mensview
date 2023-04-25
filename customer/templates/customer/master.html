@@ -238,12 +238,8 @@
           },
           success: function (response) {
             button.toggleClass('in-wishlist');
-            if (button.hasClass('in-wishlist')) {
-              button.css('color','red');
-            }
-            else {
-              button.color('color','black');
-            }
+            button.hasClass('in-wishlist') 
+            button.css('color','red');
           }
         })
       })

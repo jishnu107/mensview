@@ -3,6 +3,7 @@ from common.models import Seller,Customer
 from customer.models import Order,OrderItem
 from . models import Product
 from django.http import JsonResponse
+from django.contrib import messages
 
 # Create your views here.
 def master_page(request):   
@@ -49,6 +50,9 @@ def addprod_page(request):
         current_stock = request.POST['current_stock']
         product_image = request.FILES['p_image']
         price = request.POST['price']
+        if Product.objects.filter(product_name=product_name).exists():
+            messages.error(request, 'A product with this product name already exists.')
+            return redirect('seller:addprod')
 
 
 
@@ -171,3 +175,9 @@ def mark_as_delivered(request, s_id,o_id):
         order.item_status = 'delivered'
         order.save()
     return redirect('seller:orders')
+def product_exist(request):
+    product = request.POST['product']
+
+    status = Product.objects.filter(product_name = product).exists()
+
+    return JsonResponse({'status':status})
